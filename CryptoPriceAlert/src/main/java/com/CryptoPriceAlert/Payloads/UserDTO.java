@@ -15,5 +15,5 @@ public class UserDTO
     private String email;
     private boolean isActive; 
 
-    List<CryptoAlertDTO> alerts; 
+    private List<CryptoAlertDTO> alerts; 
 }
