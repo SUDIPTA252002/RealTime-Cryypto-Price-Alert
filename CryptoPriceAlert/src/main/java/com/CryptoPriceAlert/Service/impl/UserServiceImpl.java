@@ -54,4 +54,16 @@ public class UserServiceImpl implements UserService
         List<String> cryptoIds=alerts.stream().map(cryptoAlert->cryptoAlert.getCryptoSymbol()).collect(Collectors.toList());
         return cryptoIds;
     }
+
+    @Override
+    public Double fetchThresholdPriceOfCrypto(Long userId, String cryptoSymbol) 
+    {
+        User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","UserID", Long.toString(userId)));
+        List<CryptoAlert> alerts=user.getAlerts();
+        Double thresholdPrice=alerts.stream().filter(alert->(alert.getCryptoSymbol().equals(cryptoSymbol)))
+                        .map(alert->alert.getThresholdPrice())
+                        .findFirst()
+                        .orElse(null);
+        return thresholdPrice;
+    }
 }
