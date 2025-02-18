@@ -7,6 +7,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.CryptoPriceAlert.Entities.CryptoAlert;
 import com.CryptoPriceAlert.Entities.User;
 import com.CryptoPriceAlert.Exceptions.ResourceNotFoundException;
 import com.CryptoPriceAlert.Payloads.CryptoAlertDTO;
@@ -45,4 +46,12 @@ public class UserServiceImpl implements UserService
         return fetchedUserDto;
     }
     
+    @Override
+    public List<String> getCryptoIdsOfUser(Long userId)
+    {
+        User user=this.userRepo.findById(userId).orElseThrow(()->new ResourceNotFoundException("User","UserID", Long.toString(userId)));
+        List<CryptoAlert> alerts=user.getAlerts();
+        List<String> cryptoIds=alerts.stream().map(cryptoAlert->cryptoAlert.getCryptoSymbol()).collect(Collectors.toList());
+        return cryptoIds;
+    }
 }
